@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">travel app</string>
+    <string name="introTitle"> <font color="#3f95ec">Khám phá</font> <font color="#FF1493">và Kết nối!</font></string>
+    <string name="subintro"> Đưa bạn đến với những miền đất mới, \n kết nối muôn nơi!</string>
+</resources>
