@@ -1,36 +1,80 @@
 package com.example.travelapp.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.example.travelapp.Domain.ItemDomain;
 import com.example.travelapp.R;
 import com.example.travelapp.databinding.ActivityDetailactivityBinding;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Detailactivity extends AppCompatActivity {
     private ActivityDetailactivityBinding binding;
     private ItemDomain object;
     private boolean isFavorite = false;
-
+    private String cartId;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase database;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDetailactivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getIntentExtra();
-        if (object != null) {
-            setVariable();
-            checkFavoriteStatus();
+        // Lấy username từ SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", ""); // Lấy username từ bộ nhớ
+//        username = getIntent().getStringExtra("username");
+
+
+        if (username == null || username.isEmpty()) {
+            Toast.makeText(this, "Lỗi: Không tìm thấy username!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
+
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference userRef = database.getReference("users").child(username);
+
+        // Lấy cartId từ Firebase
+        userRef.child("cartId").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                cartId = snapshot.getValue(String.class);
+
+                Log.d("FIREBASE", "cartId lấy từ Firebase: " + cartId);
+
+                if (cartId == null || cartId.isEmpty()) {
+                    Toast.makeText(Detailactivity.this, "Lỗi: Không tìm thấy cartId!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    databaseReference = database.getReference("favoriteItems").child(cartId);
+                    getIntentExtra();
+                    if (object != null) {
+                        setVariable();
+                        checkFavoriteStatus();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FIREBASE", "Lỗi khi lấy cartId từ Firebase!", error.toException());
+                Toast.makeText(Detailactivity.this, "Lỗi khi lấy dữ liệu!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     private void setVariable() {
@@ -46,12 +90,15 @@ public class Detailactivity extends AppCompatActivity {
 
         Glide.with(this).load(object.getPic()).into(binding.pic);
         binding.backBtn.setOnClickListener(v -> finish());
-    // Chuyển sang TicketActivity khi nhấn "Add to Cart"
+
+        // Chuyển sang TicketActivity khi nhấn "Add to Cart"
         binding.addToCart.setOnClickListener(v -> {
             Intent intent = new Intent(Detailactivity.this, TicketActivity.class);
             intent.putExtra("object", object);
             startActivity(intent);
         });
+
+        // Xử lý sự kiện yêu thích
         binding.imageView7.setOnClickListener(v -> {
             isFavorite = !isFavorite;
             if (isFavorite) {
@@ -69,34 +116,79 @@ public class Detailactivity extends AppCompatActivity {
     }
 
     private void checkFavoriteStatus() {
-        List<ItemDomain> favoriteList = getFavorites();
-        isFavorite = favoriteList.stream().anyMatch(item -> item.getTitle().equals(object.getTitle()));
-        binding.imageView7.setImageResource(isFavorite ? R.drawable.baseline_favorite_24 : R.drawable.fav_icon);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                isFavorite = false;
+                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                    ItemDomain existingItem = itemSnapshot.getValue(ItemDomain.class);
+                    if (existingItem != null && existingItem.getTitle().equals(object.getTitle())) {
+                        isFavorite = true;
+                        break;
+                    }
+                }
+                binding.imageView7.setImageResource(isFavorite ? R.drawable.baseline_favorite_24 : R.drawable.fav_icon);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FIREBASE", "Lỗi khi kiểm tra trạng thái yêu thích!", error.toException());
+            }
+        });
     }
 
-    private void saveToFavorites(ItemDomain item) {
-        List<ItemDomain> favoriteList = getFavorites();
-        if (!favoriteList.contains(item)) favoriteList.add(item);
-        saveFavorites(favoriteList);
+        private void saveToFavorites(ItemDomain item) {
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean exists = false;
+                    for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                        ItemDomain existingItem = itemSnapshot.getValue(ItemDomain.class);
+                        if (existingItem != null && existingItem.getTitle().equals(item.getTitle())) {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                if (!exists) {
+                    //tạo key và lưu vào firebase
+                    String key = databaseReference.push().getKey();
+                    if (key != null) {
+                        databaseReference.child(key).setValue(item)
+                                .addOnSuccessListener(aVoid -> Log.d("FIREBASE", "Đã thêm vào danh sách yêu thích!"))
+                                .addOnFailureListener(e -> Log.e("FIREBASE", "Lỗi khi lưu!", e));
+                    }
+                } else {
+                    Log.d("FIREBASE", "Mục này đã có trong danh sách yêu thích!");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FIREBASE", "Lỗi khi lưu yêu thích!", error.toException());
+            }
+        });
     }
 
     private void removeFromFavorites(ItemDomain item) {
-        List<ItemDomain> favoriteList = getFavorites();
-        favoriteList.removeIf(fav -> fav.getTitle().equals(item.getTitle()));
-        saveFavorites(favoriteList);
-    }
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                    ItemDomain existingItem = itemSnapshot.getValue(ItemDomain.class);
+                    if (existingItem != null && existingItem.getTitle().equals(item.getTitle())) {
+                        itemSnapshot.getRef().removeValue()
+                                .addOnSuccessListener(aVoid -> Log.d("FIREBASE", "Đã xóa khỏi danh sách yêu thích!"))
+                                .addOnFailureListener(e -> Log.e("FIREBASE", "Lỗi khi xóa!", e));
+                        break;
+                    }
+                }
+            }
 
-    private List<ItemDomain> getFavorites() {
-        SharedPreferences sharedPreferences = getSharedPreferences("Favorites", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("favorite_list", null);
-        Type type = new TypeToken<ArrayList<ItemDomain>>() {}.getType();
-        return json == null ? new ArrayList<>() : gson.fromJson(json, type);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FIREBASE", "Lỗi khi xóa yêu thích!", error.toException());
+            }
+        });
     }
-
-    private void saveFavorites(List<ItemDomain> favoriteList) {
-        SharedPreferences sharedPreferences = getSharedPreferences("Favorites", Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString("favorite_list", new Gson().toJson(favoriteList)).apply();
-    }
-
 }

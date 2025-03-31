@@ -2,12 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="16dp"
     tools:context=".Activity.ExplorerActivity">
 
     <!-- Tiêu đề -->
     <TextView
+        android:layout_marginTop="30dp"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,15 +21,15 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/imageSlider"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_below="@id/title"
-        android:background="@drawable/intro_pic"
+        android:background="@drawable/air"
         android:layout_marginTop="16dp" />
 
     <!-- Chỉ báo chuyển ảnh -->
     <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/indicator"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageSlider"
         android:layout_centerHorizontal="true"
@@ -40,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/indicator"
-        android:text="Toronto, Canada"
+        android:text="Ha Noi, Viet Nam"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@android:color/black" />
@@ -61,7 +62,6 @@
         android:layout_height="250dp"
         android:layout_below="@id/placeDistance"
         android:layout_marginTop="16dp"/>
-
 
     <!-- Nút Start -->
     <Button

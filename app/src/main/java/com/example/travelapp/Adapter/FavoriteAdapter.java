@@ -1,20 +1,17 @@
 package com.example.travelapp.Adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.BaseAdapter;
+
 import com.bumptech.glide.Glide;
 import com.example.travelapp.Domain.ItemDomain;
 import com.example.travelapp.R;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class FavoriteAdapter extends BaseAdapter {
@@ -23,7 +20,7 @@ public class FavoriteAdapter extends BaseAdapter {
 
     public FavoriteAdapter(Context context, List<ItemDomain> favoriteList) {
         this.context = context;
-        this.favoriteList = getFavorites();
+        this.favoriteList = favoriteList;
     }
 
     @Override
@@ -36,14 +33,14 @@ public class FavoriteAdapter extends BaseAdapter {
         return favoriteList.get(position);
     }
 
-    public void updateFavorites() {
-        this.favoriteList = getFavorites();
-        notifyDataSetChanged();
-    }
-
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void updateData(List<ItemDomain> newList) {
+        this.favoriteList = newList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -66,14 +63,6 @@ public class FavoriteAdapter extends BaseAdapter {
         }
 
         return convertView;
-    }
-
-    private List<ItemDomain> getFavorites() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("Favorites", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("favorite_list", null);
-        Type type = new TypeToken<List<ItemDomain>>() {}.getType();
-        return json == null ? new ArrayList<>() : gson.fromJson(json, type);
     }
 
     static class ViewHolder {

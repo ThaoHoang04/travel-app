@@ -1,9 +1,27 @@
 package com.example.travelapp.Activity;
-
 public class HelperClass {
+    String name, email, username, password, cartId;
 
-    String name, email, username, password;
+    public HelperClass() {
+        // Constructor mặc định cần thiết cho Firebase
+    }
 
+    public HelperClass(String name, String email, String username, String password, String cartId) {
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.cartId = cartId;
+    }
+
+    // Getter và Setter
+    public String getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(String cartId) {
+        this.cartId = cartId;
+    }
     public String getName() {
         return name;
     }
@@ -36,13 +54,6 @@ public class HelperClass {
         this.password = password;
     }
 
-    public HelperClass(String name, String email, String username, String password) {
-        this.name = name;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
-    public HelperClass() {
-    }
 }
+
+

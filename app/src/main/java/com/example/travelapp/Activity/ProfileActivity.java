@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,15 +63,22 @@ public class ProfileActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut(); // Đăng xuất Firebase
+                // Xóa dữ liệu SharedPreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear(); // Xóa toàn bộ dữ liệu trong SharedPreferences
+                editor.apply(); // Hoặc editor.commit();
 
+                // Đăng xuất Firebase
+                FirebaseAuth.getInstance().signOut();
+
+                // Điều hướng về màn hình đăng nhập và xóa lịch sử Activity
                 Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa stack tránh quay lại
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }
         });
-
         // Xử lý sự kiện khi nhấn nút "Sửa thông tin"
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

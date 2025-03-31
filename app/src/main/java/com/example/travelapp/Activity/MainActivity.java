@@ -43,7 +43,7 @@ import java.util.ArrayList;
             EdgeToEdge.enable(this);
             setContentView(binding.getRoot());
             initLocation();
-            searchLocation();
+//            searchLocation();
             intBanner();
             initCategory();
             initRecommended();

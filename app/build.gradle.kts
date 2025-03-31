@@ -1,8 +1,8 @@
 import com.android.build.api.dsl.ApplicationBuildFeatures
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.google.gms.google.services)
+    id("com.android.application")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -57,6 +57,5 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
     implementation ("com.google.firebase:firebase-storage:20.2.1")
     implementation ("org.osmdroid:osmdroid-android:6.1.16")
-
 }
 
