@@ -36,7 +36,7 @@ public class RecimmendedAdapter extends RecyclerView.Adapter<RecimmendedAdapter.
     @Override
     public void onBindViewHolder(@NonNull RecimmendedAdapter.Viewholder holder, int position) {
         binding.titleTxt.setText(items.get(position).getTitle());
-        binding.priceTxt.setText("$" + items.get(position).getPrice());
+        binding.priceTxt.setText(items.get(position).getPrice()+ "VND");
         binding.addressTxt.setText(items.get(position).getAddress());
         binding.scoreTxt.setText("" + items.get(position).getScore());
 

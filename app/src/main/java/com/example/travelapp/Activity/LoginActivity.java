@@ -93,12 +93,13 @@ public class LoginActivity extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
-                        finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Invalid Password!", Toast.LENGTH_SHORT).show();
+                        loginPassword.setError("Sai mật khẩu vui lòng nhập lại");
+                        loginPassword.requestFocus();
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "User does not exist!", Toast.LENGTH_SHORT).show();
+                    loginUsername.setError("Sai tên đăng nhập");
+                    loginUsername.requestFocus();
                 }
             }
 

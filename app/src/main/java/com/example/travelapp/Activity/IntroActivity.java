@@ -25,7 +25,7 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // Kiểm tra nếu đã đăng nhập trước đó
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        SharedPreferences  sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
 
         if (username != null) {

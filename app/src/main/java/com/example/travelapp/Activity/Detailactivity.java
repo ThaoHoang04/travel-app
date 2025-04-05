@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.travelapp.Domain.ItemDomain;
 import com.example.travelapp.R;
+import com.example.travelapp.Vnpay.VnpayMainActivity;
 import com.example.travelapp.databinding.ActivityDetailactivityBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,7 +80,7 @@ public class Detailactivity extends AppCompatActivity {
 
     private void setVariable() {
         binding.titleTxt.setText(object.getTitle());
-        binding.priceTxt.setText("$ " + object.getPrice());
+        binding.priceTxt.setText( object.getPrice() + "VND");
         binding.bedTxt.setText(String.valueOf(object.getBed()));
         binding.durationTxt.setText(object.getDuration());
         binding.distanceTxt.setText(object.getDistance());
@@ -93,9 +94,10 @@ public class Detailactivity extends AppCompatActivity {
 
         // Chuyển sang TicketActivity khi nhấn "Add to Cart"
         binding.addToCart.setOnClickListener(v -> {
-            Intent intent = new Intent(Detailactivity.this, TicketActivity.class);
+            Intent intent = new Intent(Detailactivity.this, VnpayMainActivity.class);
             intent.putExtra("object", object);
             startActivity(intent);
+            finish();
         });
 
         // Xử lý sự kiện yêu thích

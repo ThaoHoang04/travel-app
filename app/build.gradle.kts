@@ -57,5 +57,9 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
     implementation ("com.google.firebase:firebase-storage:20.2.1")
     implementation ("org.osmdroid:osmdroid-android:6.1.16")
+    implementation ("com.google.code.gson:gson:2.8.5")
+    implementation ("com.squareup.okhttp3:okhttp:3.14.1")
+    implementation(files("libs/merchant-1.0.25.aar"))
+    implementation ("androidx.fragment:fragment:1.6.2")
 }
 

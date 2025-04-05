@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-    <!--    <meta-data-->
-<!--        android:name="com.google.android.geo.API_KEY"-->
-<!--        android:value="AIzaSyDBUnPoR26SZzEKC49f3AxKYwKwuvgQ2Qs"/>-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- <meta-data -->
+    <!-- android:name="com.google.android.geo.API_KEY" -->
+    <!-- android:value="AIzaSyDBUnPoR26SZzEKC49f3AxKYwKwuvgQ2Qs"/> -->
     <meta-data
         android:name="org.osmdroid.config"
-        android:value="true"/>
+        android:value="true" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +24,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelApp"
         tools:targetApi="31">
+        <activity
+            android:name=".Vnpay.ResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Vnpay.PaymentWebViewActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout|uiMode"
+
+        android:exported="false" />
+        <activity
+            android:name=".Vnpay.VnpayMainActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.ExplorerActivity"
             android:exported="true" />
@@ -44,8 +54,7 @@
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            /> <!-- LoginActivity -->
+            android:launchMode="singleTask" /> <!-- LoginActivity -->
         <activity
             android:name=".Activity.LoginActivity"
             android:exported="false" /> <!-- SignupActivity (Thiếu, cần bổ sung) -->
