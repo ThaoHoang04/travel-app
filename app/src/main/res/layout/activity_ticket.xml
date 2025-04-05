@@ -54,6 +54,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/backBtn"/>
 
                 <LinearLayout
+                    android:id="@+id/tickket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="24dp"
@@ -276,7 +277,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button3"
+                android:id="@+id/btnSave"
                 android:layout_margin="24dp"
                 android:background="@drawable/blue_bg"
                 style="@android:style/Widget.Button"
