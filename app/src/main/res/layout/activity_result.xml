@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <!-- Biểu tượng thành công -->
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="230dp"
+        android:layout_height="146dp"
+        android:src="@drawable/completed" />
+
+    <!-- Tiêu đề -->
+    <TextView
+
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Thanh toán thành công"
+        android:textColor="#333333"
+        android:textSize="18sp" />
+
+    <!-- Số tiền -->
+    <TextView
+        android:id="@+id/txtAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5.980.000₫"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#4CAF50"
+        android:layout_marginTop="8dp" />
+
+    <!-- Kết quả giao dịch: mã + thời gian -->
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#666666"
+        android:layout_marginTop="24dp" />
+
+    <!-- Nút chi tiết giao dịch -->
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xem chi tiết vé"
+        android:backgroundTint="#1976D2"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="32dp"
+        android:padding="12dp" />
+
+</LinearLayout>
