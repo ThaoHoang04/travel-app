@@ -56,16 +56,7 @@ public class TicketActivity extends BaseActivity {
         binding.tourTxt.setText(object.getDateTour());
         binding.timeTxt.setText(object.getTimeTour());
         binding.TourguideTxt.setText(object.getTourGuideName());
-        binding.callBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent  intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("sms" + object.getTourGuidePhone()));
-                intent.putExtra("sms_body", "type your message");
-                startActivity(intent);
 
-            }
-        });
         binding.callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +77,7 @@ public class TicketActivity extends BaseActivity {
 
                 // Tạo Intent để gửi SMS
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phone));
-                intent.putExtra("sms_body", "Type your message here"); // Đặt nội dung mặc định cho tin nhắn
+                intent.putExtra("sms_body", "Hello, I can you help!"); // Đặt nội dung mặc định cho tin nhắn
                 startActivity(intent);
             }
         });

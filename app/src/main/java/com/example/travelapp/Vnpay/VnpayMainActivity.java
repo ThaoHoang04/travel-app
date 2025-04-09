@@ -139,7 +139,7 @@ public class VnpayMainActivity extends AppCompatActivity {
             intent.putExtra("object", object);
             intent.putExtra("payment_url", paymentUrl);
             intent.putExtra("amount", String.valueOf(amount));
-            intent.putExtra("txnRef", txnRef);
+                intent.putExtra("txnRef", txnRef);
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();

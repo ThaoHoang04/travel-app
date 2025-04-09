@@ -1,6 +1,7 @@
 package com.example.travelapp.Vnpay;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -12,16 +13,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelapp.Activity.Detailactivity;
 import com.example.travelapp.Activity.MainActivity;
+import com.example.travelapp.Activity.Order;
 import com.example.travelapp.Activity.TicketActivity;
 import com.example.travelapp.Domain.ItemDomain;
 import com.example.travelapp.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Locale;
+import java.util.UUID;
 
 public class ResultActivity extends AppCompatActivity {
     private static final String TAG = "VNPAY_RESULT";
     private ItemDomain object;
-
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase database;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,10 @@ public class ResultActivity extends AppCompatActivity {
         ImageView imgStatusLogo = findViewById(R.id.icon);
         Button btnBack = findViewById(R.id.btnBack);
         object = (ItemDomain) getIntent().getSerializableExtra("object");
+        String orderId;
+        String itemsId;
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", null);
 
         Intent intent = getIntent();
         String result = intent.getStringExtra("result");
@@ -65,9 +75,16 @@ public class ResultActivity extends AppCompatActivity {
                         Amount = formatAmount(amount) + " VNĐ";
                         resultText = "Mã giao dịch: " + txnRef;
                         imgStatusLogo.setImageResource (R.drawable.completed);
-//                        resultText = "Thanh toán thành công!\n\n" +
-//                                "Số tiền: " + formatAmount(amount) + " VNĐ\n" +
-//                                "Mã giao dịch: " + txnRef;
+                        database = FirebaseDatabase.getInstance();
+                        databaseReference = database.getReference("Order");
+                        String name = username;
+                        String total = formatAmount(amount);
+                        itemsId = String.valueOf(object.getBed());
+                        String paymentID = txnRef;
+                        orderId = UUID.randomUUID().toString(); // Tạo Orderid duy nhất
+                        Order order = new Order(orderId, name, paymentID, itemsId,total);
+                        databaseReference.child(orderId).setValue(order);
+
                     }
                     break;
                 case "payment.cancelled":
@@ -102,7 +119,7 @@ public class ResultActivity extends AppCompatActivity {
         txtAmount.setText(Amount);
         txtResult.setText(resultText);
 
-        // Xử lý nút Back
+        // Xử lý nút xem chi tiết
         btnBack.setOnClickListener(v -> {
             Intent intent1 = new Intent(ResultActivity.this, TicketActivity.class);
 //            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -125,8 +142,11 @@ public class ResultActivity extends AppCompatActivity {
             Log.e(TAG, "Invalid amount format: " + amountStr, e);
             return amountStr;
         }
-    }
 
+    }
+private  void handleDatabase(){
+
+}
     // Xử lý nút back của thiết bị
     @Override
     public void onBackPressed() {

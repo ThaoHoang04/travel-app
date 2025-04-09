@@ -96,6 +96,7 @@ public class Detailactivity extends AppCompatActivity {
         binding.addToCart.setOnClickListener(v -> {
             Intent intent = new Intent(Detailactivity.this, VnpayMainActivity.class);
             intent.putExtra("object", object);
+            intent.putExtra("itemId", object.getItemId());
             startActivity(intent);
             finish();
         });
