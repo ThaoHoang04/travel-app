@@ -46,16 +46,54 @@ public class SignupActivity extends AppCompatActivity {
                 String email = signupEmail.getText().toString();
                 String username = signupUsername.getText().toString();
                 String password = signupPassword.getText().toString();
-                String cartId = UUID.randomUUID().toString(); // Tạo cartId duy nhất
 
-                // Thêm cartId vào HelperClass
-                HelperClass helperClass = new HelperClass(name, email, username, password, cartId);
-                reference.child(username).setValue(helperClass);
+                if (name.isEmpty()) {
+                    signupName.setError("Tên không được để trống");
+                    signupName.requestFocus();
+                    return;
+                }
+                if (email.isEmpty()) {
+                    signupEmail.setError("Email không được để trống");
+                    signupEmail.requestFocus();
+                    return;
+                }
+                else if (!isValidEmail(email)) {
+                        signupEmail.setError("Email không hợp lệ");
+                        signupEmail.requestFocus();
+                        return;
 
-
-                Toast.makeText(SignupActivity.this, "You have signed up successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);
+                }
+                if (username.isEmpty()) {
+                    signupUsername.setError("Tên đăng nhập không được để trống");
+                    signupUsername.requestFocus();
+                    return;
+                }
+                if (password.isEmpty() || password.length() < 6) {
+                    signupPassword.setError("Password không được để trống và trên 6 ký tự");
+                    signupPassword.requestFocus();
+                    return;
+                }
+                reference.child(username).get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()) {
+                            // Username đã tồn tại
+                            signupUsername.setError("Tên người dùng đã tồn tại");
+                            signupUsername.requestFocus();
+                        } else {
+                            // Username chưa tồn tại, tiến hành tạo tài khoản
+//                            String cartId = UUID.randomUUID().toString();
+                            String cartId = username;
+                            HelperClass helperClass = new HelperClass(name, email, username, password, cartId);
+                            reference.child(username).setValue(helperClass);
+                            Toast.makeText(SignupActivity.this, "You have signed up successfully!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(SignupActivity.this, "Lỗi kết nối cơ sở dữ liệu!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -65,6 +103,11 @@ public class SignupActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
+
         });
+
     }
-}
+    public boolean isValidEmail(String email) {
+        return email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+    }

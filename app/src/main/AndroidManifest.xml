@@ -23,13 +23,15 @@
         android:theme="@style/Theme.TravelApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.TestActivity"
+            android:exported="false" />
+        <activity
             android:name=".Vnpay.ResultActivity"
             android:exported="false" />
         <activity
             android:name=".Vnpay.PaymentWebViewActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout|uiMode"
-
-        android:exported="false" />
+            android:exported="false" />
         <activity
             android:name=".Vnpay.VnpayMainActivity"
             android:exported="false" />

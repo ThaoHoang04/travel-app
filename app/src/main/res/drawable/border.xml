@@ -1,0 +1,20 @@
+<!-- res/drawable/border.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Màu nền bên trong -->
+    <solid android:color="#F5F5F5"/> <!-- Màu nền sáng nhẹ -->
+
+    <!-- Đường viền -->
+    <stroke
+        android:color="#B0BEC5"
+    android:width="2dp"/>      <!-- Độ dày viền -->
+
+    <!-- Bo góc -->
+    <corners android:radius="8dp"/> <!-- Góc bo tròn 8dp -->
+
+    <!-- Bóng đổ nhẹ (tuỳ chọn để thêm chiều sâu) -->
+    <padding
+        android:left="8dp"
+        android:top="8dp"
+        android:right="8dp"
+        android:bottom="8dp"/>
+</shape>

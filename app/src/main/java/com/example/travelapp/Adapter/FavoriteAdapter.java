@@ -51,6 +51,7 @@ public class FavoriteAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.titleTxt = convertView.findViewById(R.id.favoriteTitle);
             holder.imageView = convertView.findViewById(R.id.favoriteImage);
+//            holder.descriptionTxt = convertView.findViewById(R.id.favoriteDescription);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -66,7 +67,7 @@ public class FavoriteAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView titleTxt;
+        TextView titleTxt,descriptionTxt;
         ImageView imageView;
     }
 }

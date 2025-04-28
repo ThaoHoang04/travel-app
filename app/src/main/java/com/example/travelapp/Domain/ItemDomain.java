@@ -3,7 +3,7 @@ package com.example.travelapp.Domain;
 import java.io.Serializable;
 
 public class ItemDomain implements Serializable {
-    private String itemId;
+    private int itemsId;
     private String title;
     private String address;
     private String description;
@@ -134,11 +134,11 @@ public class ItemDomain implements Serializable {
         this.tourGuidePic = tourGuidePic;
     }
 
-    public String getItemId() {
-        return itemId;
+    public int getItemsId() {
+        return itemsId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setItemsId(int itemsId) {
+        this.itemsId = itemsId;
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,13 +17,16 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 
 import com.example.travelapp.Adapter.CategoryAdapter;
+import com.example.travelapp.Adapter.FavoriteAdapter;
 import com.example.travelapp.Adapter.PopularAdapter;
 import com.example.travelapp.Adapter.RecimmendedAdapter;
 import com.example.travelapp.Adapter.SliderAdapter;
+import com.example.travelapp.Domain.ApiClient;
 import com.example.travelapp.Domain.Category;
 import com.example.travelapp.Domain.ItemDomain;
 import com.example.travelapp.Domain.Location;
 import com.example.travelapp.Domain.slider;
+import com.example.travelapp.Interface.ApiService;
 import com.example.travelapp.R;
 import com.example.travelapp.databinding.ActivityMainBinding;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +36,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
     public class MainActivity extends BaseActivity {
         ActivityMainBinding binding;
@@ -44,7 +53,6 @@ import java.util.ArrayList;
             EdgeToEdge.enable(this);
             setContentView(binding.getRoot());
             initLocation();
-//            searchLocation();
             intBanner();
             initCategory();
             initRecommended();
@@ -88,25 +96,14 @@ import java.util.ArrayList;
                 Toast.makeText(this, "Vui lòng nhập địa điểm", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            ArrayList<Location> filteredList = new ArrayList<>();
-            for (Location loc : locationList) {
-                if (loc.getLoc().toLowerCase().contains(query)) {
-                    filteredList.add(loc);
-                }
+            else{
+                Intent intent = new Intent(MainActivity.this, TestActivity.class);
+             intent.putExtra("searchResults", query);
+                      startActivity(intent);
+//                );
             }
 
-            if (filteredList.isEmpty()) {
-                Toast.makeText(this, "Không tìm thấy kết quả", Toast.LENGTH_SHORT).show();
-            }
-
-            // Cập nhật dữ liệu vào Spinner
-            ArrayAdapter<Location> adapter = new ArrayAdapter<>(this, R.layout.sp_item, filteredList);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            binding.locationspiner.setAdapter(adapter);
         }
-
-
 
         private void initPopular() {
             DatabaseReference myRef = database.getReference("Popular");

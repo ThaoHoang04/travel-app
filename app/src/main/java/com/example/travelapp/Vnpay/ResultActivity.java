@@ -3,6 +3,7 @@ package com.example.travelapp.Vnpay;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,13 +14,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelapp.Activity.Detailactivity;
 import com.example.travelapp.Activity.MainActivity;
-import com.example.travelapp.Activity.Order;
+import com.example.travelapp.Domain.Order;
 import com.example.travelapp.Activity.TicketActivity;
 import com.example.travelapp.Domain.ItemDomain;
 import com.example.travelapp.R;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -40,7 +44,8 @@ public class ResultActivity extends AppCompatActivity {
         Button btnBack = findViewById(R.id.btnBack);
         object = (ItemDomain) getIntent().getSerializableExtra("object");
         String orderId;
-        String itemsId;
+        int itemId;
+       itemId = object.getItemsId();
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
 
@@ -77,14 +82,31 @@ public class ResultActivity extends AppCompatActivity {
                         imgStatusLogo.setImageResource (R.drawable.completed);
                         database = FirebaseDatabase.getInstance();
                         databaseReference = database.getReference("Order");
-                        String name = username;
-                        String total = formatAmount(amount);
-                        itemsId = String.valueOf(object.getBed());
-                        String paymentID = txnRef;
-                        orderId = UUID.randomUUID().toString(); // Tạo Orderid duy nhất
-                        Order order = new Order(orderId, name, paymentID, itemsId,total);
-                        databaseReference.child(orderId).setValue(order);
+                        generateNewOrderIdAndSave(username, txnRef, object.getItemsId(), amount);
+//
+//                        String name = username;
+//                        String total = formatAmount(amount);
+//                        itemId = object.getItemsId();
+//                        String paymentID = txnRef;
+//                        Date date = new Date();
+//                        // Định dạng hiển thị (ví dụ: 13/04/2025 15:23:08)
+//                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//                        String formattedDate = sdf.format(date);
+//                        orderId = "#ORD-" + orderidnumber; // set kieu #ORD-7246
+//                        orderidnumber++;
+//                        int key = 0;
+//                        key++;
+//                        String processed = "processing";
+//                        Order order = new Order(orderId, name, paymentID, itemId,total,formattedDate,processed);
+//                        databaseReference.child(String.valueOf(key)).setValue(order);
 
+                        btnBack.setOnClickListener(v -> {
+                            Intent intent1 = new Intent(ResultActivity.this, TicketActivity.class);
+//            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            intent1.putExtra("object", object);
+                          startActivity(intent1);
+                            finish();
+                        });
                     }
                     break;
                 case "payment.cancelled":
@@ -92,12 +114,30 @@ public class ResultActivity extends AppCompatActivity {
                     Amount = "";
                     resultText = "Bạn đã hủy giao dịch";
                     imgStatusLogo.setImageResource(R.drawable.err);
+                    btnBack.setText("Quay trở lại màn hình chi tiết");
+                    btnBack.setOnClickListener(v -> {
+                        Intent intent1 = new Intent(ResultActivity.this, Detailactivity.class);
+//            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent1.putExtra("object", object);
+
+                        startActivity(intent1);
+                        finish();
+                    });
                     break;
                 case "payment.error":
                     title ="Giao dịch thất bại!";
                     Amount = "";
                     resultText ="Vui lòng thử lại sau.";
                     imgStatusLogo.setImageResource(R.drawable.err);
+                    btnBack.setText("Quay trở lại màn hình chi tiết");
+                    btnBack.setOnClickListener(v -> {
+                        Intent intent1 = new Intent(ResultActivity.this, Detailactivity.class);
+//            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent1.putExtra("object", object);
+
+                        startActivity(intent1);
+                        finish();
+                    });
                     break;
                 default:
                     title ="Giao dịch thất bại!";
@@ -105,6 +145,15 @@ public class ResultActivity extends AppCompatActivity {
                     resultText ="Kết quả không xác định";
                     imgStatusLogo.setImageResource(R.drawable.err);
                     Log.w(TAG, "Unknown result code: " + result);
+                    btnBack.setText("Quay trở lại màn hình chi tiết");
+                    btnBack.setOnClickListener(v -> {
+                        Intent intent1 = new Intent(ResultActivity.this, Detailactivity.class);
+//            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent1.putExtra("object", object);
+
+                        startActivity(intent1);
+                        finish();
+                    });
                     break;
             }
         } else {
@@ -114,19 +163,78 @@ public class ResultActivity extends AppCompatActivity {
             imgStatusLogo.setImageResource(R.drawable.err);
             Log.e(TAG, "Result is null");
             Toast.makeText(this, "Không nhận được kết quả từ VNPay", Toast.LENGTH_SHORT).show();
+            btnBack.setText("Quay trở lại màn hình chi tiết");
+            btnBack.setOnClickListener(v -> {
+                Intent intent1 = new Intent(ResultActivity.this, Detailactivity.class);
+//            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent1.putExtra("object", object);
+
+                startActivity(intent1);
+                finish();
+            });
         }
         txttitle.setText(title);
         txtAmount.setText(Amount);
         txtResult.setText(resultText);
 
         // Xử lý nút xem chi tiết
-        btnBack.setOnClickListener(v -> {
-            Intent intent1 = new Intent(ResultActivity.this, TicketActivity.class);
-//            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent1.putExtra("object", object);
 
-            startActivity(intent1);
-            finish();
+    }
+
+    private void generateNewOrderIdAndSave(String username, String txnRef, int itemsId, String amount) {
+        databaseReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                int maxOrderId = 1000;
+                for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                    Order order = snapshot.getValue(Order.class);
+                    if (order != null && order.getOrderId() != null) {
+                        String orderIdStr = order.getOrderId().replace("#ORD-", "");
+                        try {
+                            int id = Integer.parseInt(orderIdStr);
+                            if (id > maxOrderId) {
+                                maxOrderId = id;
+                            }
+                        } catch (NumberFormatException e) {
+                            Log.e(TAG, "Invalid order ID format: " + orderIdStr, e);
+                        }
+                    }
+                }
+                maxOrderId++;
+                String newOrderId = "#ORD-" + maxOrderId;
+                Log.d(TAG, "Generated new order ID: " + newOrderId);
+
+                saveOrderToFirebase(newOrderId, username, txnRef, itemsId, amount);
+            } else {
+                Log.e(TAG, "Failed to read Orders from Firebase", task.getException());
+            }
+        });
+    }
+
+    private void saveOrderToFirebase(String orderId, String username, String txnRef, int itemId, String amount) {
+        databaseReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                int key = 1; // mặc định nếu chưa có Order nào thì key = 1
+
+                if (task.getResult() != null) {
+                    key = (int) task.getResult().getChildrenCount() + 1;
+                    // Đếm tổng số node Order hiện có rồi +1
+                }
+
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+                String formattedDate = sdf.format(date);
+
+                String total = formatAmount(amount);
+                String status = "processing";
+
+                Order order = new Order(orderId, username, txnRef, itemId, total, formattedDate, status);
+
+                databaseReference.child(String.valueOf(key)).setValue(order)
+                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Order saved successfully with key: " + orderId))
+                        .addOnFailureListener(e -> Log.e(TAG, "Failed to save Order", e));
+            } else {
+                Log.e(TAG, "Failed to read Orders from Firebase", task.getException());
+            }
         });
     }
 

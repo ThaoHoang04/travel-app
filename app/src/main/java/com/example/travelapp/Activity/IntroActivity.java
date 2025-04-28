@@ -16,24 +16,24 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Kiểm tra nếu ứng dụng đã khởi chạy trước đó
-        if (!isTaskRoot()) {
-            finish();
-            return;
-        }
+//        if (!isTaskRoot()) {
+//            finish();
+//            return;
+//        }
 
         binding = ActivityIntroBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Kiểm tra nếu đã đăng nhập trước đó
-        SharedPreferences  sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String username = sharedPreferences.getString("username", null);
-
-        if (username != null) {
-            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        }
+//        // Kiểm tra nếu đã đăng nhập trước đó
+//        SharedPreferences  sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        String username = sharedPreferences.getString("username", null);
+//
+//        if (username != null) {
+//            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//            finish();
+//        }
 
         // Chuyển sang SignupActivity
         binding.introBtn.setOnClickListener(v -> {

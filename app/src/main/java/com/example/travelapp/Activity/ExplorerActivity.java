@@ -114,7 +114,7 @@ public class ExplorerActivity extends BaseActivity {
             // Thiết lập nguồn tile cho bản đồ
             mapView.setTileSource(TileSourceFactory.MAPNIK);
             mapView.setMultiTouchControls(true);
-            mapView.getController().setZoom(15.0);
+            mapView.getController().setZoom(3.0);
             mapView.getController().setCenter(initialLocation);
 
             // Thêm marker cho vị trí ban đầu (Hà Nội)
