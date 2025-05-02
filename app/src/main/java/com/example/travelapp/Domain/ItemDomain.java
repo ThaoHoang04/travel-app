@@ -99,7 +99,7 @@ public class ItemDomain implements Serializable {
     }
 
     public void setPrice(int price) {
-        this.price = price*1000;
+        this.price = price;
     }
 
     public int getBed() {

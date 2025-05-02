@@ -12,4 +12,6 @@ import retrofit2.http.Query;
 public interface ApiService {
     @GET("/api/item")
     Call<List<ItemDomain>> searchLocation(@Query("q") String query);
+    @GET("/api/item")
+    Call<List<ItemDomain>> GetItem(@Query("c") int categoryId);
 }

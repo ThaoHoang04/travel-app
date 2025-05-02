@@ -1,7 +1,11 @@
 package com.example.travelapp.Adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+import static java.lang.Float.NaN;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.Transliterator;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.travelapp.Activity.DetailCateActivity;
+import com.example.travelapp.Activity.MainActivity;
+import com.example.travelapp.Activity.TestActivity;
 import com.example.travelapp.Domain.Category;
 import com.example.travelapp.R;
 import com.example.travelapp.databinding.ViewholderCategoryBinding;
@@ -53,6 +60,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Viewho
                 selecPosition = position;
                 notifyItemChanged(lastPosion);
                 notifyItemChanged(selecPosition);
+                // GỌI API LUÔN Ở ĐÂY
+                getItemIncate(category.getId());
             }
         });
         holder.binding.title.setTextColor(context.getColor(R.color.white));
@@ -66,6 +75,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Viewho
             holder.binding.mainlayout.setBackgroundResource(0);
             holder.binding.title.setVisibility(View.GONE);
         }
+    }
+
+    private void getItemIncate(int id) {
+       Intent intent = new Intent(context, DetailCateActivity.class);
+       intent.putExtra("items", id);
+        context.startActivity(intent);
     }
 
     @Override
