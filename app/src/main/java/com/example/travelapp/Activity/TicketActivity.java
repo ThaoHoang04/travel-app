@@ -81,6 +81,12 @@ public class TicketActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        binding.btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takeScreenshotAndSave();
+            }
+        });
 
     }
 
