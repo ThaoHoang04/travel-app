@@ -1,6 +1,7 @@
 package com.example.travelapp.Domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ItemDomain implements Serializable {
     private int itemsId;

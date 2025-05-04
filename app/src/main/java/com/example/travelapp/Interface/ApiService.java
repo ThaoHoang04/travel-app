@@ -2,6 +2,7 @@ package com.example.travelapp.Interface;
 
 import com.example.travelapp.Domain.ItemDomain;
 import com.example.travelapp.Domain.Location;
+import com.example.travelapp.Domain.MyTicket;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface ApiService {
     Call<List<ItemDomain>> searchLocation(@Query("q") String query);
     @GET("/api/item")
     Call<List<ItemDomain>> GetItem(@Query("c") int categoryId);
+    @GET("api/order")
+    Call<List<MyTicket>> getOrders(@Query("u") String username);
 }
+
+

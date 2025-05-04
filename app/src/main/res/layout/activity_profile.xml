@@ -279,20 +279,20 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/password"
                 android:layout_weight="1"
-                android:text="Password"
+                android:text="My Ticket"
                 android:textStyle="bold"
                 android:textColor="@color/lavender"
                 android:textSize="18sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/myTicket"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/profilePassword"
-                android:text="password"
                 android:layout_weight="1"
-                android:textAlignment="viewEnd"
-                android:textColor="#949494"
-                android:textSize="18sp"/>
+                android:backgroundTint="@color/lavender"
+                android:text="Detail" />
+
+
         </LinearLayout>
 
     </LinearLayout>

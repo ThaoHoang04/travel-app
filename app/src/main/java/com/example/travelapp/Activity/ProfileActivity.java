@@ -25,8 +25,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     TextView profileName, profileEmail, profileUsername, profilePassword;
     TextView titleName, titleUsername;
-    Button editProfile, logoutButton;
+    Button editProfile, logoutButton,detailTicket;
     String userUsername;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +38,13 @@ public class ProfileActivity extends AppCompatActivity {
         profileName = findViewById(R.id.profileName);
         profileEmail = findViewById(R.id.profileEmail);
         profileUsername = findViewById(R.id.profileUsername);
-        profilePassword = findViewById(R.id.profilePassword);
+//        profilePassword = findViewById(R.id.profilePassword);
+        detailTicket = findViewById(R.id.myTicket);
         titleName = findViewById(R.id.titleName);
         titleUsername = findViewById(R.id.titleUsername);
         editProfile = findViewById(R.id.editButton);
         logoutButton = findViewById(R.id.logout);
+
 
         // Lấy username từ Intent hoặc FirebaseAuth
         userUsername = getIntent().getStringExtra("username");
@@ -64,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Xóa dữ liệu SharedPreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear(); // Xóa toàn bộ dữ liệu trong SharedPreferences
                 editor.apply(); // Hoặc editor.commit();
@@ -86,6 +89,14 @@ public class ProfileActivity extends AppCompatActivity {
                 passUserData();
             }
         });
+        detailTicket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, MyTicketActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -117,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
                     profileName.setText(nameFromDB);
                     profileEmail.setText(emailFromDB);
                     profileUsername.setText(userUsername);
-                    profilePassword.setText(passwordFromDB);
+//                    profilePassword.setText(passwordFromDB);
 
                     Log.d("ProfileDebug", "Dữ liệu user " + userUsername + " lấy thành công!");
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelapp.R;
@@ -15,8 +16,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class EditProfileActivity extends BaseActivity {
 
-    EditText editName, editEmail, editUsername, editPassword;
+    EditText editName, editEmail, editUsername;
     Button saveButton;
+    TextView editPassword;
     String nameUser, emailUser, usernameUser, passwordUser;
     DatabaseReference reference;
 
@@ -40,6 +42,8 @@ public class EditProfileActivity extends BaseActivity {
             public void onClick(View view) {
                 if (isNameChanged() || isEmailChanged() || isPasswordChanged()) {
                     Toast.makeText(EditProfileActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(EditProfileActivity.this, "No Changes Found", Toast.LENGTH_SHORT).show();
                 }
