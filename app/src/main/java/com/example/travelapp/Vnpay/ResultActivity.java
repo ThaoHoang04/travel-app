@@ -188,7 +188,7 @@ public class ResultActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : task.getResult().getChildren()) {
                     Order order = snapshot.getValue(Order.class);
                     if (order != null && order.getOrderId() != null) {
-                        String orderIdStr = order.getOrderId().replace("#ORD-", "");
+                        String orderIdStr = order.getOrderId().replace("ORD-", "");
                         try {
                             int id = Integer.parseInt(orderIdStr);
                             if (id > maxOrderId) {
@@ -200,7 +200,7 @@ public class ResultActivity extends AppCompatActivity {
                     }
                 }
                 maxOrderId++;
-                String newOrderId = "#ORD-" + maxOrderId;
+                String newOrderId = "ORD-" + maxOrderId;
                 Log.d(TAG, "Generated new order ID: " + newOrderId);
 
                 saveOrderToFirebase(newOrderId, username, txnRef, itemsId, amount);

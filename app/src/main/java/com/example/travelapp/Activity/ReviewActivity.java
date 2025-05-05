@@ -59,12 +59,12 @@ public class ReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review);
         item = (ItemDomain) getIntent().getSerializableExtra("object");
         oderId = getIntent().getStringExtra("orderid");
-        databaseReference = FirebaseDatabase.getInstance().getReference("review");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Review");
 
         // Ánh xạ view
       widget();
       loaddata();
-        fetchReviewsFromFirebase();
+//        fetchReviewsFromFirebase();
 
         // Cập nhật điểm đánh giá theo RatingBar
                 ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {

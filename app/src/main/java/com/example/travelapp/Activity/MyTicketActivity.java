@@ -60,7 +60,7 @@ public class MyTicketActivity extends AppCompatActivity {
                     if (result.isEmpty()) {
                         Toast.makeText(MyTicketActivity.this, "Không lấy được items", Toast.LENGTH_SHORT).show();
                     } else {
-                        DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference("review");
+                        DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference("Review");
                         reviewRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -75,9 +75,8 @@ public class MyTicketActivity extends AppCompatActivity {
                                 List<MyTicket> filteredTickets = new ArrayList<>();
 
                                 for (MyTicket rs : result) {
-                                    if ((itemID != null && itemID.equals(rs.getItemId())) ||
-                                            reviewedOrderIds.contains(rs.getOrderId())) {
-                                        continue; // Bỏ qua tour đã review hoặc đã được truyền itemID
+                                    if (reviewedOrderIds.contains(rs.getOrderId())) {
+                                        continue;
                                     }
                                     tourList.add(rs.getTourInfo());
                                     filteredTickets.add(rs);

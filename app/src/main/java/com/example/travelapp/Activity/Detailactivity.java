@@ -8,9 +8,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.travelapp.Adapter.RatingAdapter;
 import com.example.travelapp.Domain.ItemDomain;
+import com.example.travelapp.Domain.RatingModel;
 import com.example.travelapp.R;
 import com.example.travelapp.Vnpay.VnpayMainActivity;
 import com.example.travelapp.databinding.ActivityDetailactivityBinding;
@@ -20,6 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class Detailactivity extends AppCompatActivity {
     private ActivityDetailactivityBinding binding;
     private ItemDomain object;
@@ -27,6 +36,11 @@ public class Detailactivity extends AppCompatActivity {
     private String cartId;
     private DatabaseReference databaseReference;
     private FirebaseDatabase database;
+    private RatingAdapter adapter;
+    private List<RatingModel> ratingList = new ArrayList<>();
+    private RecyclerView rvPreviousRatings;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +58,6 @@ public class Detailactivity extends AppCompatActivity {
             finish();
             return;
         }
-
         database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("users").child(username);
 
@@ -65,6 +78,8 @@ public class Detailactivity extends AppCompatActivity {
                     if (object != null) {
                         setVariable();
                         checkFavoriteStatus();
+                        fetchReviewsFromFirebase(object.getItemsId());
+
                     }
                 }
             }
@@ -76,6 +91,7 @@ public class Detailactivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     private void setVariable() {
@@ -169,6 +185,79 @@ public class Detailactivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("FIREBASE", "Lỗi khi lưu yêu thích!", error.toException());
+            }
+        });
+    }
+    private void fetchReviewsFromFirebase(int currentItemId) {
+        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order");
+        DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference("Review");
+
+        // Bước 1: Lấy toàn bộ Review
+        reviewRef.get().addOnCompleteListener(reviewTask -> {
+            if (reviewTask.isSuccessful()) {
+                List<DataSnapshot> matchingReviews = new ArrayList<>();
+
+                // Bước 2: Duyệt tất cả review, lấy orderId
+                for (DataSnapshot reviewSnapshot : reviewTask.getResult().getChildren()) {
+                    String orderId = reviewSnapshot.child("orderId").getValue(String.class);
+                    if (orderId != null) {
+                        matchingReviews.add(reviewSnapshot);
+                    }
+                }
+
+                // Bước 3: Lấy toàn bộ Order để đối chiếu
+                orderRef.get().addOnCompleteListener(orderTask -> {
+                    if (orderTask.isSuccessful()) {
+                        ratingList.clear();
+
+                        for (DataSnapshot reviewSnapshot : matchingReviews) {
+                            String reviewOrderId = reviewSnapshot.child("orderId").getValue(String.class);
+
+                            // Duyệt toàn bộ Order để tìm order có id trùng
+                            for (DataSnapshot orderSnapshot : orderTask.getResult().getChildren()) {
+                                String orderIdInDb = orderSnapshot.child("orderId").getValue(String.class);
+
+                                if (reviewOrderId != null && reviewOrderId.equals(orderIdInDb)) {
+                                    // So sánh itemId
+                                    Long itemIdLong = orderSnapshot.child("itemId").getValue(Long.class);
+                                    if (itemIdLong != null && itemIdLong.intValue() == currentItemId) {
+
+                                        // Nếu trùng thì lấy dữ liệu review
+                                        String name = reviewSnapshot.child("name").getValue(String.class);
+                                        String comment = reviewSnapshot.child("comment").getValue(String.class);
+                                        String ratingStr = reviewSnapshot.child("ratingValue").getValue(String.class);
+
+                                        float rating = 0f;
+                                        try {
+                                            rating = Float.parseFloat(ratingStr);
+                                        } catch (NumberFormatException e) {
+                                            // ignore
+                                        }
+
+                                        if (name == null || name.trim().isEmpty()) {
+                                            name = "Ẩn danh";
+                                        }
+
+                                        ratingList.add(0, new RatingModel(name, rating, comment));
+                                        break; // đã match rồi thì không cần check order khác
+                                    }
+                                }
+                            }
+                        }
+
+                        // Hiển thị
+                        rvPreviousRatings = findViewById(R.id.rvPreviousRatings);
+                        adapter = new RatingAdapter(ratingList);
+                        rvPreviousRatings.setLayoutManager(new LinearLayoutManager(this));
+                        rvPreviousRatings.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        rvPreviousRatings.scrollToPosition(0);
+                    } else {
+                        Toast.makeText(this, "Không thể tải dữ liệu đơn hàng!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Không thể tải đánh giá!", Toast.LENGTH_SHORT).show();
             }
         });
     }
