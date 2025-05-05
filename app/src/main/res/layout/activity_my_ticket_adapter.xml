@@ -30,9 +30,23 @@
         android:textStyle="bold"
         android:textSize="15sp"
         android:textColor="#324EE2"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pic"
         app:layout_constraintTop_toTopOf="@+id/pic" />
+
+    <TextView
+        android:id="@+id/btnreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Review"
+        android:textAlignment="center"
+        android:textColor="#FA1504"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/addressTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="18dp"
