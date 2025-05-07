@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class RecimmendedAdapter extends RecyclerView.Adapter<RecimmendedAdapter.Viewholder> {
     ArrayList<ItemDomain> items;
     Context context;
-    ViewholderRecommenBinding binding;
+//    ViewholderRecommenBinding binding;
 
     public RecimmendedAdapter(ArrayList<ItemDomain> items) {
         this.items = items;
@@ -28,28 +28,26 @@ public class RecimmendedAdapter extends RecyclerView.Adapter<RecimmendedAdapter.
     @NonNull
     @Override
     public RecimmendedAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        binding = ViewholderRecommenBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
+        ViewholderRecommenBinding binding = ViewholderRecommenBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         context = parent.getContext();
         return new Viewholder(binding);
-    }
-
-    @Override
+    }@Override
     public void onBindViewHolder(@NonNull RecimmendedAdapter.Viewholder holder, int position) {
-        binding.titleTxt.setText(items.get(position).getTitle());
-        binding.priceTxt.setText(items.get(position).getPrice()+ "VND");
-        binding.addressTxt.setText(items.get(position).getAddress());
-        binding.scoreTxt.setText("" + items.get(position).getScore());
+        ItemDomain item = items.get(position); // Không cần dùng getAdapterPosition ở đây
+
+        holder.binding.titleTxt.setText(item.getTitle());
+        holder.binding.priceTxt.setText(item.getPrice() + "VND");
+        holder.binding.addressTxt.setText(item.getAddress());
+        holder.binding.scoreTxt.setText("" + item.getScore());
 
         Glide.with(context)
-                .load(items.get(position).getPic())
-                .into(binding.pic);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, Detailactivity.class);
-                intent.putExtra("object",items.get(position));
-                context.startActivity(intent);
-            }
+                .load(item.getPic())
+                .into(holder.binding.pic);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, Detailactivity.class);
+            intent.putExtra("object", item);
+            context.startActivity(intent);
         });
     }
 
@@ -59,8 +57,13 @@ public class RecimmendedAdapter extends RecyclerView.Adapter<RecimmendedAdapter.
     }
 
     public class Viewholder extends RecyclerView.ViewHolder {
+        ViewholderRecommenBinding binding;
+
         public Viewholder(ViewholderRecommenBinding binding) {
             super(binding.getRoot());
+            this.binding = binding;
         }
     }
+
 }
+

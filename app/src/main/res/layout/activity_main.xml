@@ -58,7 +58,6 @@
                 android:background="@drawable/grey_bg"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
-
                 android:layout_height="match_parent">
 
                 <EditText
@@ -246,7 +245,6 @@
                     android:layout_height="wrap_content"
                     android:text="See all"
                     android:textColor="#03A9F4"
-
                     />
             </LinearLayout>
 
@@ -280,7 +278,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
     </ScrollView>
+
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/chipNavigationBar"
         android:layout_width="match_parent"
@@ -294,4 +294,76 @@
         app:cnb_iconColor="#00DDFF"
         app:cnb_radius="50dp"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <!-- Main FAB (Menu) -->
+    <ImageView
+        android:id="@+id/fab_main"
+        android:layout_width="80dp"
+        android:layout_height="105dp"
+        android:layout_margin="16dp"
+        android:contentDescription="Menu chính"
+        android:src="@drawable/service"
+        android:elevation="6dp"
+        app:layout_constraintBottom_toTopOf="@id/chipNavigationBar"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- FAB Facebook -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Facebook"
+        android:src="@drawable/ic_facebook"
+        android:visibility="invisible"
+        app:backgroundTint="#1877F2"
+        app:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="@id/fab_main" />
+
+    <!-- FAB Zalo -->
+    <ImageView
+        android:id="@+id/fab_zalo"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/zalo"
+        android:contentDescription="Zalo"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/fab_facebook"
+        app:layout_constraintEnd_toEndOf="@id/fab_main" />
+
+    <!-- FAB Gọi điện -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Gọi điện"
+        android:src="@drawable/baseline_call_24"
+        android:visibility="invisible"
+        app:backgroundTint="#4CAF50"
+        app:tint="@color/white"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@id/fab_zalo"
+        app:layout_constraintEnd_toEndOf="@id/fab_main" />
+
+    <!-- FAB AI -->
+    <ImageView
+        android:id="@+id/img_ai"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/download"
+        android:contentDescription="AI"
+        android:background="#ADD8E6"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/fab_call"
+        app:layout_constraintEnd_toEndOf="@id/fab_main" />
 </androidx.constraintlayout.widget.ConstraintLayout>
