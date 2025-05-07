@@ -49,6 +49,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.Viewhold
             public void onClick(View v) {
                 Intent intent = new Intent(context, Detailactivity.class);
                 intent.putExtra("object",items.get(position));
+                context.startActivity(intent);
             }
         });
     }
