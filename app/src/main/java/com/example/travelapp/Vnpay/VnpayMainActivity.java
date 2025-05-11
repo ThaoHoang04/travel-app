@@ -32,7 +32,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class VnpayMainActivity extends AppCompatActivity {
     private static final String TAG = "VNPAY_APP";
     private static final int VNPAY_REQUEST_CODE = 1001;
-    private TextView edtAmount;
+    private TextView tvTourName, tvAmount, tvTotalAmount, tvPeopleCount;
     FirebaseDatabase database;
     DatabaseReference reference;
     SharedPreferences sharedPreferences;
@@ -44,16 +44,22 @@ public class VnpayMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vnpay_main);
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         ItemDomain object = (ItemDomain) getIntent().getSerializableExtra("object");
-        edtAmount = findViewById(R.id.edtAmount);
         int amountEdt = object.getPrice()* object.getBed();
-        edtAmount.setText(String.valueOf(amountEdt));
+//        tvTotalAmount.setText(String.valueOf(amountEdt));
+        getWidget();
+        tvTourName.setText(object.getTitle());
+        tvPeopleCount.setText(String.valueOf(object.getBed()));
+        tvAmount.setText(object.getPrice() + "VND");
+        tvTotalAmount.setText(amountEdt + "VND");
+
         Button btnPay = findViewById(R.id.btnPay);
         Button btnBack = findViewById(R.id.back);
         btnBack.setOnClickListener(view -> {
             finish();
                 });
         btnPay.setOnClickListener(view -> {
-            String amountStr = edtAmount.getText().toString().trim();
+            String amountStr = tvTotalAmount.getText().toString().trim();
+            amountStr = amountStr.replaceAll("[^0-9]", ""); // Loại bỏ tất cả ký tự không phải số
             if (TextUtils.isEmpty(amountStr)) {
                 Toast.makeText(this, "Vui lòng nhập số tiền", Toast.LENGTH_SHORT).show();
                 return;
@@ -192,4 +198,12 @@ public class VnpayMainActivity extends AppCompatActivity {
                 break;
         }
     }
+    private void getWidget() {
+        tvTourName = findViewById(R.id.tvTourName);
+        tvPeopleCount = findViewById(R.id.tvPeopleCount);
+        tvTotalAmount = findViewById(R.id.tvTotalAmount);
+        tvAmount = findViewById(R.id.tvAmount);
+
+    }
+
 }
