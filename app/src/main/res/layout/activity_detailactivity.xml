@@ -277,13 +277,13 @@
                                     app:layout_constraintEnd_toStartOf="@id/bedTxt"
                                     app:layout_constraintTop_toTopOf="@id/bedTxt"
                                     app:layout_constraintVertical_bias="0.253"
-                                    app:srcCompat="@drawable/bed" />
+                                    app:srcCompat="@drawable/teamwork" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
-                                    android:text="Bed"
+                                    android:text="Person"
                                     android:textColor="#314EEF"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"

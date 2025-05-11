@@ -37,6 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
@@ -148,17 +149,20 @@ import retrofit2.Response;
 
         private void initRecommended() {
             DatabaseReference myRef = database.getReference("Item");
+            Query query = myRef.orderByChild("status").equalTo(1);
             binding.progressBarRecommended.setVisibility(View.VISIBLE);
 
             ArrayList<ItemDomain> list = new ArrayList<>();
 
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
                      if(snapshot.exists()) {
                          for (DataSnapshot issue : snapshot.getChildren()) {
+                             Boolean deleted = issue.child("deleted").getValue(Boolean.class);
+                             if (deleted != null && !deleted) {
                              list.add(issue.getValue(ItemDomain.class));
+                             }
                          }
 
                          if (!list.isEmpty()) {
@@ -168,7 +172,7 @@ import retrofit2.Response;
                              adapter.notifyDataSetChanged();  // Gọi notifyDataSetChanged()
                          }
                          binding.progressBarRecommended.setVisibility(View.GONE);
-                     }
+
                      }
                 }
                 @Override
