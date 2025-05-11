@@ -45,7 +45,7 @@ public class VnpayMainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         ItemDomain object = (ItemDomain) getIntent().getSerializableExtra("object");
         edtAmount = findViewById(R.id.edtAmount);
-        int amountEdt = object.getPrice();
+        int amountEdt = object.getPrice()* object.getBed();
         edtAmount.setText(String.valueOf(amountEdt));
         Button btnPay = findViewById(R.id.btnPay);
         Button btnBack = findViewById(R.id.back);
