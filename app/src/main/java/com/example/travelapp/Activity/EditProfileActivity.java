@@ -16,9 +16,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class EditProfileActivity extends BaseActivity {
 
-    EditText editName, editEmail, editUsername;
+    EditText editName, editEmail,editPassword;
     Button saveButton;
-    TextView editPassword;
+    TextView editUsername;
     String nameUser, emailUser, usernameUser, passwordUser;
     DatabaseReference reference;
 
