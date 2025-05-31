@@ -412,7 +412,8 @@ import retrofit2.Response;
             // Ở đây bạn có thể thêm mã để mở trợ lý AI của bạn
             // Ví dụ: mở một Activity mới hoặc hiển thị dialog
             Toast.makeText(MainActivity.this, "Đang mở trợ lý AI...", Toast.LENGTH_SHORT).show();
-
+            Intent chatAi = new Intent(MainActivity.this, AiChatActivity.class);
+            startActivity(chatAi);
             // Ví dụ mở một Activity mới
             // Intent aiIntent = new Intent(MainActivity.this, AiChatActivity.class);
             // startActivity(aiIntent);

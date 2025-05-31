@@ -23,6 +23,13 @@ public class ItemDomain implements Serializable {
     public ItemDomain() {
     }
 
+    public ItemDomain(String title, String description,  int price, String duration, String pic) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+        this.pic = pic;
+    }
     public String getTitle() {
         return title;
     }
