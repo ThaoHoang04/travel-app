@@ -61,7 +61,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Viewho
                 notifyItemChanged(lastPosion);
                 notifyItemChanged(selecPosition);
                 // GỌI API LUÔN Ở ĐÂY
-                getItemIncate(category.getId());
+                getItemIncate(category.getId(), category.getName());
             }
         });
         holder.binding.title.setTextColor(context.getColor(R.color.white));
@@ -77,9 +77,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Viewho
         }
     }
 
-    private void getItemIncate(int id) {
+    private void getItemIncate(int id, String name) {
        Intent intent = new Intent(context, DetailCateActivity.class);
        intent.putExtra("items", id);
+       intent.putExtra("Name", name);
         context.startActivity(intent);
     }
 

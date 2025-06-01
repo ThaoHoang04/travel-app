@@ -40,6 +40,14 @@ public class DetailCateActivity extends AppCompatActivity {
         if(intent != null && intent.hasExtra("items")) {
             // Lấy giá trị String từ Intent
                 int cateId=  intent.getIntExtra("items",-1);
+            String name = intent.getStringExtra("Name");
+            TextView textView = findViewById(R.id.detailcate);
+            if (name != null) {
+                textView.setText("Detail item in " + name);
+            } else {
+                textView.setText("Detail item");
+            }
+
             //goi API
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
             Call<List<ItemDomain>> call = apiService.GetItem(cateId);

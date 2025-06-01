@@ -318,7 +318,7 @@
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginBottom="80dp"
-        android:text="Đăng xuất"
+        android:text="Logout"
         android:textSize="18sp"
         android:backgroundTint="@color/lavender"
         app:cornerRadius="20dp"

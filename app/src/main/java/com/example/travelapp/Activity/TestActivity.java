@@ -1,7 +1,10 @@
 package com.example.travelapp.Activity;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -15,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.travelapp.Adapter.FavoriteAdapter;
 import com.example.travelapp.Domain.ApiClient;
 import com.example.travelapp.Domain.ItemDomain;
+import com.example.travelapp.Domain.ItemResponse;
 import com.example.travelapp.Interface.ApiService;
 import com.example.travelapp.R;
 
@@ -49,13 +53,13 @@ public class TestActivity extends AppCompatActivity {
 
             // Gọi API tìm kiếm (ví dụ dùng Retrofit)
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
-            Call<List<ItemDomain>> call = apiService.searchLocation(searchQuery);
-            call.enqueue(new Callback<List<ItemDomain>>() {
+            Call<ItemResponse> call = apiService.searchLocation(searchQuery);
+            call.enqueue(new Callback<ItemResponse>() {
                 @Override
-                public void onResponse(Call<List<ItemDomain>> call, Response<List<ItemDomain>> response) {
+                public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
                     // Đảm bảo rằng yêu cầu đã thành công và dữ liệu trong phản hồi không phải là null.
                     if (response.isSuccessful() && response.body() != null) {
-                        List<ItemDomain> result = response.body();
+                        List<ItemDomain> result = response.body().getData();
                         if (result.isEmpty()) {
                             Toast.makeText(TestActivity.this, "Không tìm thấy địa điểm", Toast.LENGTH_SHORT).show();
                         } else {
@@ -80,8 +84,9 @@ public class TestActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<List<ItemDomain>> call, Throwable t) {
+                public void onFailure(Call<ItemResponse> call, Throwable t) {
                     Toast.makeText(TestActivity.this, "Không kết nối được tới server", Toast.LENGTH_SHORT).show();
+
                 }
             });
         }

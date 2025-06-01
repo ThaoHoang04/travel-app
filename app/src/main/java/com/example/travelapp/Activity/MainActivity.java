@@ -41,8 +41,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -153,53 +157,36 @@ import retrofit2.Response;
             binding.progressBarRecommended.setVisibility(View.VISIBLE);
 
             ArrayList<ItemDomain> list = new ArrayList<>();
+            Date today = new Date(); // Ngày hiện tại
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                     if(snapshot.exists()) {
-                         for (DataSnapshot issue : snapshot.getChildren()) {
-                             Boolean deleted = issue.child("deleted").getValue(Boolean.class);
-                             if (deleted != null && !deleted) {
-                             list.add(issue.getValue(ItemDomain.class));
-                             }
-                         }
-
-                         if (!list.isEmpty()) {
-                             binding.recyclerViewRecommended.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                             RecyclerView.Adapter adapter = new RecimmendedAdapter(list);
-                             binding.recyclerViewRecommended.setAdapter(adapter);
-                             adapter.notifyDataSetChanged();  // Gọi notifyDataSetChanged()
-                         }
-                         binding.progressBarRecommended.setVisibility(View.GONE);
-
-                     }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-
-        private void initCategory() {
-            DatabaseReference myRef = database.getReference("Category");
-            binding.progressBarCategory.setVisibility(View.VISIBLE);
-            ArrayList<Category> list = new ArrayList<>();
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()) {
-                        for(DataSnapshot issue:snapshot.getChildren()) {
-                            list.add(issue.getValue(Category.class));
+                        for (DataSnapshot issue : snapshot.getChildren()) {
+                            Boolean deleted = issue.child("deleted").getValue(Boolean.class);
+                            String dateTourStr = issue.child("dateTour").getValue(String.class);
+                            if (deleted != null && !deleted && dateTourStr != null) {
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                    Date dateTour = sdf.parse(dateTourStr);
+                                    if (dateTour != null && !dateTour.before(today)) {
+                                        list.add(issue.getValue(ItemDomain.class));
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace(); // Lỗi định dạng ngày
+                                }
+                            }
                         }
-                        if(!list.isEmpty()) {
-                            binding.recyclerViewCategory.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL, false));
-                            RecyclerView.Adapter adapter = new CategoryAdapter(list);
-                            binding.recyclerViewCategory.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();  // Gọi notifyDataSetChanged()
+
+                        if (!list.isEmpty()) {
+                            binding.recyclerViewRecommended.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                            RecyclerView.Adapter adapter = new RecimmendedAdapter(list);
+                            binding.recyclerViewRecommended.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
                         }
-                        binding.progressBarCategory.setVisibility(View.GONE);
+
+                        binding.progressBarRecommended.setVisibility(View.GONE);
                     }
                 }
 
@@ -209,6 +196,50 @@ import retrofit2.Response;
                 }
             });
         }
+
+
+        private void initCategory() {
+            DatabaseReference myRef = database.getReference("Category");
+            binding.progressBarCategory.setVisibility(View.VISIBLE);
+            ArrayList<Category> list = new ArrayList<>();
+
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot issue : snapshot.getChildren()) {
+                            Boolean deleted = issue.child("deleted").getValue(Boolean.class);
+                            Long status = issue.child("status").getValue(Long.class);
+                            // Nếu deleted = false (hoặc null) và status = 1 thì mới thêm
+                            if ((deleted == null || !deleted) && status != null && status == 1) {
+                                Category category = issue.getValue(Category.class);
+                                if (category != null) {
+                                    list.add(category);
+                                }
+                            }
+                        }
+
+                        if (!list.isEmpty()) {
+                            binding.recyclerViewCategory.setLayoutManager(
+                                    new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false)
+                            );
+                            RecyclerView.Adapter adapter = new CategoryAdapter(list);
+                            binding.recyclerViewCategory.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        binding.progressBarCategory.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    binding.progressBarCategory.setVisibility(View.GONE);
+                    // Xử lý lỗi nếu cần
+                }
+            });
+        }
+
 
         private void initLocation() {
             DatabaseReference myRef = database.getReference("Location");
@@ -373,7 +404,7 @@ import retrofit2.Response;
                     startActivity(intent);
                 } else {
                     // Ứng dụng Facebook chưa được cài đặt, mở trang web
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com"));
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/huydz24"));
                     startActivity(intent);
                 }
             } catch (Exception e) {
@@ -391,7 +422,7 @@ import retrofit2.Response;
                     startActivity(intent);
                 } else {
                     // Ứng dụng Zalo chưa được cài đặt, mở trang web
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://zalo.me"));
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://zalo.me/0364356053"));
                     startActivity(intent);
                 }
             } catch (Exception e) {
@@ -414,8 +445,5 @@ import retrofit2.Response;
             Toast.makeText(MainActivity.this, "Đang mở trợ lý AI...", Toast.LENGTH_SHORT).show();
             Intent chatAi = new Intent(MainActivity.this, AiChatActivity.class);
             startActivity(chatAi);
-            // Ví dụ mở một Activity mới
-            // Intent aiIntent = new Intent(MainActivity.this, AiChatActivity.class);
-            // startActivity(aiIntent);
         }
     }
