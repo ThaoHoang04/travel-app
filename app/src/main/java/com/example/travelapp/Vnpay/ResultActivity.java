@@ -3,35 +3,45 @@ package com.example.travelapp.Vnpay;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelapp.Activity.Detailactivity;
 import com.example.travelapp.Activity.MainActivity;
+import com.example.travelapp.Domain.ApiClient;
+import com.example.travelapp.Domain.MailTo;
 import com.example.travelapp.Domain.Order;
 import com.example.travelapp.Activity.TicketActivity;
 import com.example.travelapp.Domain.ItemDomain;
+import com.example.travelapp.Interface.ApiService;
 import com.example.travelapp.R;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ResultActivity extends AppCompatActivity {
     private static final String TAG = "VNPAY_RESULT";
     private ItemDomain object;
     private DatabaseReference databaseReference;
     private FirebaseDatabase database;
+    String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +57,7 @@ public class ResultActivity extends AppCompatActivity {
         int itemId;
        itemId = object.getItemsId();
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String username = sharedPreferences.getString("username", null);
+         username = sharedPreferences.getString("username", null);
 
         Intent intent = getIntent();
         String result = intent.getStringExtra("result");
@@ -83,23 +93,7 @@ public class ResultActivity extends AppCompatActivity {
                         database = FirebaseDatabase.getInstance();
                         databaseReference = database.getReference("Order");
                         generateNewOrderIdAndSave(username, txnRef, object.getItemsId(), amount);
-//
-//                        String name = username;
-//                        String total = formatAmount(amount);
-//                        itemId = object.getItemsId();
-//                        String paymentID = txnRef;
-//                        Date date = new Date();
-//                        // Định dạng hiển thị (ví dụ: 13/04/2025 15:23:08)
-//                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//                        String formattedDate = sdf.format(date);
-//                        orderId = "#ORD-" + orderidnumber; // set kieu #ORD-7246
-//                        orderidnumber++;
-//                        int key = 0;
-//                        key++;
-//                        String processed = "processing";
-//                        Order order = new Order(orderId, name, paymentID, itemId,total,formattedDate,processed);
-//                        databaseReference.child(String.valueOf(key)).setValue(order);
-
+//                        sendMail();
                         btnBack.setOnClickListener(v -> {
                             Intent intent1 = new Intent(ResultActivity.this, TicketActivity.class);
 //            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -181,6 +175,69 @@ public class ResultActivity extends AppCompatActivity {
 
     }
 
+    private void sendMail(String oderid, String amount, String ngayDat) {
+        DatabaseReference referenceusename = FirebaseDatabase.getInstance().getReference("users");
+        referenceusename.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String emailFromDB = snapshot.child("email").getValue(String.class);
+                    String tentour = object.getTitle();
+                    String ngaykhoihanh = object.getDateTour();
+                    int price = object.getPrice();
+                    int songuoi = object.getBed();
+                    String subject = "Đặt tour thành công – Kiểm tra chi tiết đơn hàng tại đây";
+                    String content = "<html>\n" +
+                            "  <body style=\"font-family: Arial, sans-serif; padding: 20px; background-color: #f6f8fa;\">\n" +
+                            "    <div style=\"max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px;\">\n" +
+                            "      <h2 style=\"color: #007bff;\">Xin chào " + username + ",</h2>\n" +
+                            "      <p>Cảm ơn bạn đã lựa chọn <strong>Travel App</strong> để đồng hành trong hành trình sắp tới!</p>\n" +
+                            "      <div style=\"line-height: 1.8;\">\n" +
+                            "        <p><strong>Mã đơn hàng:</strong> " + oderid + "</p>\n" +
+                            "        <p><strong>Tên tour:</strong> "+ tentour + "</p>\n" +
+                            "        <p><strong>Ngày đặt hàng:</strong>"+ ngayDat + "</p>\n" +
+                            "        <p><strong>Đơn giá:</strong> "+ price + "</p>\n" +
+                            "        <p><strong>Số người:</strong>" + songuoi + "</p>\n" +
+                            "        <p><strong>Ngày khởi hành:</strong>" + ngaykhoihanh + "</p>\n" +
+                            "        <p><strong>Tổng giá trị:</strong> <strong style=\"color: #e74c3c;\">"+ amount + "</strong></p>\n" +
+                            "      </div>\n" +
+                            "      <p>Chúng tôi sẽ thông báo cho bạn khi có bất kỳ thay đổi gì về chuyến đi.</p>\n" +
+                            "      <p>Mọi thắc mắc, vui lòng liên hệ: <a href=\"mailto:helpdesktravelapp@gmail.com\">helpdesktravelapp@gmail.com</a></p>\n" +
+                            "      <br>\n" +
+                            "      <p>Trân trọng,<br>Đội ngũ Travel App</p>\n" +
+                            "    </div>\n" +
+                            "  </body>\n" +
+                            "  </html>";
+                    MailTo mailTo = new MailTo(emailFromDB, subject, content);
+
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    Call<ResponseBody> call = apiService.sendEmail(mailTo);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("API", "Send email created successfully");
+                            } else {
+                                Log.e("API", "Error: " + response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e("API", "Failure: " + t.getMessage());
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void generateNewOrderIdAndSave(String username, String txnRef, int itemsId, String amount) {
         databaseReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -232,10 +289,13 @@ public class ResultActivity extends AppCompatActivity {
                 databaseReference.child(String.valueOf(key)).setValue(order)
                         .addOnSuccessListener(aVoid -> Log.d(TAG, "Order saved successfully with key: " + orderId))
                         .addOnFailureListener(e -> Log.e(TAG, "Failed to save Order", e));
+
+                sendMail(orderId,total,formattedDate);
             } else {
                 Log.e(TAG, "Failed to read Orders from Firebase", task.getException());
             }
         });
+
     }
 
     // Định dạng số tiền
