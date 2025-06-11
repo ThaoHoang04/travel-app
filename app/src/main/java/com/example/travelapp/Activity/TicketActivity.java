@@ -30,7 +30,7 @@ public class TicketActivity extends BaseActivity {
     ActivityTicketBinding binding;
     private ItemDomain object;
     Uri uri;
-
+String oderid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +55,9 @@ public class TicketActivity extends BaseActivity {
         binding.titleTxt.setText(object.getTitle());
         binding.tourTxt.setText(object.getDateTour());
         binding.timeTxt.setText(object.getTimeTour());
+        binding.guestTxt.setText(String.valueOf(object.getBed()));
         binding.TourguideTxt.setText(object.getTourGuideName());
+        binding.txtOderId.setText(oderid);
 
         binding.callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +93,9 @@ public class TicketActivity extends BaseActivity {
     }
 
     private void getIntentExtra() {
-        object = (ItemDomain) getIntent().getSerializableExtra("object"); 
+        object = (ItemDomain) getIntent().getSerializableExtra("object");
+        oderid = getIntent().getStringExtra("orderId");
+
     }
     public void takeScreenshotAndSave() {
         try {
