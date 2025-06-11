@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.travelapp.Activity.DetailCateActivity;
-import com.example.travelapp.Activity.MainActivity;
-import com.example.travelapp.Activity.TestActivity;
 import com.example.travelapp.Domain.Category;
 import com.example.travelapp.R;
 import com.example.travelapp.databinding.ViewholderCategoryBinding;

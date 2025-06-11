@@ -9,7 +9,7 @@ public class ApiClient {
     public static Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.0.141:3003") // Đổi URL server bạn ở đây
+                    .baseUrl("https://travel-app-api-production-84da.up.railway.app/") // Đổi URL server bạn ở đây
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
