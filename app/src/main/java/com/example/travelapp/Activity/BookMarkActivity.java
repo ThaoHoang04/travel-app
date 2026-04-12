@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookMarkActivity extends AppCompatActivity {
+public class BookMarkActivity extends BaseActivity {
     private ListView favoriteListView;
     private FavoriteAdapter favoriteAdapter;
     private List<ItemDomain> favoriteList;
@@ -35,6 +35,8 @@ public class BookMarkActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark);
+        
+        setupBottomNavigation();
 
         favoriteListView = findViewById(R.id.favoriteListView);
         favoriteList = new ArrayList<>();
