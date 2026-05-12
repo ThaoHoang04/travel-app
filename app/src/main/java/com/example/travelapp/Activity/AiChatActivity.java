@@ -55,7 +55,7 @@ public class AiChatActivity extends AppCompatActivity {
     // Thay đổi thành API endpoint của bạn (có thể dùng OpenAI, Gemini, hoặc API khác)
 //    private static final String AI_API_URL = "http://192.168.0.66:11434/v1/chat/completions";
 //    private static final String API_KEY = "ollama"; // Thay bằng API key thực nếu cần
-    private static final String AI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAcKga8T50JQrB8KyT8nxL8T-0oKQ2ywKg";
+    private static final String AI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyCxSDamAj41tEcQ1VT011BSOC5z7SR7zc0";
 
     // Lưu trữ lịch sử chat như trong code Python
     private List<ChatMessage> chatHistory;

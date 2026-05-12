@@ -31,13 +31,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        if (sharedPreferences.contains("username")) {
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(intent);
-//            finish(); // Kết thúc LoginActivity
-//            return;
-//        }
+        if (sharedPreferences.contains("username")) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish(); // Kết thúc LoginActivity
+            return;
+        }
         setContentView(R.layout.activity_login);
 
         loginUsername = findViewById(R.id.login_username);

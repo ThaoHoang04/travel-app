@@ -329,5 +329,6 @@
         app:layout_constraintStart_toEndOf="@id/editButton"
         app:layout_constraintHorizontal_chainStyle="packed" />
 
+    <include layout="@layout/layout_bottom_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

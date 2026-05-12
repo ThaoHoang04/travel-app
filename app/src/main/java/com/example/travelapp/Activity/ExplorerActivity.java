@@ -56,6 +56,8 @@ public class ExplorerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exploer);
 
+        setupBottomNavigation();
+
         // Khởi tạo các thành phần giao diện
         placeName = findViewById(R.id.placeName);
         placeDistance = findViewById(R.id.placeDistance);
