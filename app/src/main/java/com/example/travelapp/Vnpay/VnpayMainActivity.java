@@ -120,7 +120,7 @@ public class VnpayMainActivity extends AppCompatActivity {
             params.put("vnp_OrderInfo", orderInfo);
             params.put("vnp_OrderType", "other");
             params.put("vnp_ReturnUrl", "https://sandbox.vnpayment.vn/return_url");
-            params.put("vnp_TmnCode", "QZ6PN0M7");
+            params.put("vnp_TmnCode", "TOEFXDEM");
             params.put("vnp_TxnRef", txnRef);
             params.put("vnp_Version", "2.1.0");
 
@@ -131,7 +131,7 @@ public class VnpayMainActivity extends AppCompatActivity {
             }
 
 
-            String secretKey = "CY3CVBGG203QCQ8H9SD7U7JX6BGVP146";
+            String secretKey = "O4RRUOPPTVDP1Z2U6LHGSNMH04K4CO9N";
             String vnpSecureHash = hmacSHA512(secretKey, dataToSign.toString());
 
             // Tạo URL thanh toán

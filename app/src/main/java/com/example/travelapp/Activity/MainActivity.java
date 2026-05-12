@@ -1,4 +1,4 @@
-    package com.example.travelapp.Activity;
+package com.example.travelapp.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,11 +54,8 @@ import retrofit2.Response;
 
     public class MainActivity extends BaseActivity {
         ActivityMainBinding binding;
-        private ArrayList<Location> locationList = new ArrayList<>(); // Danh sách đầy đủ địa điểm
-        private ImageView fabMain, fabZalo, imgAi;
-        private FloatingActionButton fabFacebook, fabCall;
-        private Animation fabOpen, fabClose;
         private boolean isFabMenuOpen = false;
+        private ArrayList<Location> locationList = new ArrayList<>(); // Danh sách đầy đủ địa điểm
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -75,29 +72,8 @@ import retrofit2.Response;
             String username = sharedPreferences.getString("username", ""); // Lấy username từ bộ nhớ
 //            Toast.makeText(this, "Xin chào " + username, Toast.LENGTH_SHORT).show();
 
-            ChipNavigationBar chipNavigationBar = findViewById(R.id.chipNavigationBar);
-            // Xử lý sự kiện khi nhấn vào menu
-            chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(int id) {
-
-
-                    if (id == R.id.profile) {
-                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                        intent.putExtra("username", username);  // Truyền username thật
-                        startActivity(intent);
-                    }
-                    else if(id == R.id.cart){
-                        Intent intent = new Intent(MainActivity.this, BookMarkActivity.class);
-                        startActivity(intent);
-                    }
-                    else if(id == R.id.favorites){
-                        Intent intent = new Intent(MainActivity.this, ExplorerActivity.class);
-                        startActivity(intent);
-
-                    }
-                }
-            });
+            setupBottomNavigation();
+            
             binding.btnSearch.setOnClickListener(view -> searchLocation());
 
         }
@@ -254,7 +230,7 @@ import retrofit2.Response;
                         }
                         ArrayAdapter<Location> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        binding.locationspiner.setAdapter(adapter);
+//                        binding.locationspiner.setAdapter(adapter);
                     }
                 }
 

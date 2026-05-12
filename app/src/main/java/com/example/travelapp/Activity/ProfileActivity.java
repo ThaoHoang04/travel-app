@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
     TextView profileName, profileEmail, profileUsername, profilePassword;
     TextView titleName, titleUsername;
@@ -33,6 +33,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        
+        setupBottomNavigation();
 
         // Ánh xạ các view
         profileName = findViewById(R.id.profileName);
