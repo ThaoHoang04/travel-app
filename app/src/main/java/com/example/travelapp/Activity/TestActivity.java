@@ -35,6 +35,7 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_test);
+        findViewById(R.id.backBtn).setOnClickListener(v -> finish());
         searchLocation();
     }
     public void  searchLocation() {

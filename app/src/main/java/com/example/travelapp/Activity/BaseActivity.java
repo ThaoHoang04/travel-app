@@ -15,10 +15,10 @@ import com.example.travelapp.R;
 public class BaseActivity extends AppCompatActivity {
     FirebaseDatabase database;
 
-    private ImageView fabMain, fabZalo, imgAi;
-    private com.google.android.material.floatingactionbutton.FloatingActionButton fabFacebook, fabCall;
-    private android.view.animation.Animation fabOpen, fabClose;
-    private boolean isFabMenuOpen = false;
+    protected ImageView fabMain, fabZalo, imgAi;
+    protected com.google.android.material.floatingactionbutton.FloatingActionButton fabFacebook, fabCall;
+    protected android.view.animation.Animation fabOpen, fabClose;
+    protected boolean isFabMenuOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

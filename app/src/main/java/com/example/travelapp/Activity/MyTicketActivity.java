@@ -39,6 +39,7 @@ public class MyTicketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_my_ticket);
+        findViewById(R.id.backBtn).setOnClickListener(v -> finish());
         loadTicket();
         itemID = getIntent().getStringExtra("itemsId");
         items = (ItemDomain) getIntent().getSerializableExtra("object");

@@ -18,10 +18,11 @@
         tools:layout_editor_absoluteX="20dp">
 
         <ImageView
-            android:id="@+id/avatar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/logo" />
+            android:id="@+id/backBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back" />
 
         <TextView
             android:id="@+id/detailcate"
