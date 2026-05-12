@@ -70,7 +70,7 @@ import retrofit2.Response;
             initPopular();
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             String username = sharedPreferences.getString("username", ""); // Lấy username từ bộ nhớ
-            Toast.makeText(this, "Xin chào " + username, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Xin chào " + username, Toast.LENGTH_SHORT).show();
 
             setupBottomNavigation();
             
@@ -168,7 +168,6 @@ import retrofit2.Response;
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }
@@ -275,7 +274,150 @@ import retrofit2.Response;
             });
 
         }
-        private void getWidget() {
-            // Already handled in setupBottomNavigation()
+        private void getWidget(){
+            // Khởi tạo các view
+            fabMain = findViewById(R.id.fab_main);
+            fabFacebook = findViewById(R.id.fab_facebook);
+            fabZalo = findViewById(R.id.fab_zalo);
+            fabCall = findViewById(R.id.fab_call);
+            imgAi = findViewById(R.id.img_ai);
+
+            // Khởi tạo animations
+            fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+            fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+            // Thiết lập sự kiện click cho nút chính
+            fabMain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toggleFabMenu();
+                }
+            });
+
+            // Thiết lập sự kiện click cho nút Facebook
+            fabFacebook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openFacebook();
+                    toggleFabMenu();
+                }
+            });
+
+            // Thiết lập sự kiện click cho nút Zalo
+            fabZalo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openZalo();
+                    toggleFabMenu();
+                }
+            });
+
+            // Thiết lập sự kiện click cho nút Gọi điện
+            fabCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    makePhoneCall();
+                    toggleFabMenu();
+                }
+            });
+
+            // Thiết lập sự kiện click cho nút AI
+            imgAi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openAiAssistant();
+                    toggleFabMenu();
+                }
+            });
+        }
+        // Phương thức để mở/đóng menu
+        private void toggleFabMenu() {
+            if (isFabMenuOpen) {
+                // Đóng menu
+                fabFacebook.startAnimation(fabClose);
+                fabZalo.startAnimation(fabClose);
+                fabCall.startAnimation(fabClose);
+                imgAi.startAnimation(fabClose);
+
+                fabFacebook.setClickable(false);
+                fabZalo.setClickable(false);
+                fabCall.setClickable(false);
+                imgAi.setClickable(false);
+
+                fabFacebook.setVisibility(View.INVISIBLE);
+                fabZalo.setVisibility(View.INVISIBLE);
+                fabCall.setVisibility(View.INVISIBLE);
+                imgAi.setVisibility(View.INVISIBLE);
+
+                isFabMenuOpen = false;
+            } else {
+                // Mở menu
+                fabFacebook.startAnimation(fabOpen);
+                fabZalo.startAnimation(fabOpen);
+                fabCall.startAnimation(fabOpen);
+                imgAi.startAnimation(fabOpen);
+
+                fabFacebook.setClickable(true);
+                fabZalo.setClickable(true);
+                fabCall.setClickable(true);
+                imgAi.setClickable(true);
+
+                fabFacebook.setVisibility(View.VISIBLE);
+                fabZalo.setVisibility(View.VISIBLE);
+                fabCall.setVisibility(View.VISIBLE);
+                imgAi.setVisibility(View.VISIBLE);
+
+                isFabMenuOpen = true;
+            }
+        }
+
+        // Phương thức mở Facebook
+        private void openFacebook() {
+            try {
+                Intent intent = getPackageManager().getLaunchIntentForPackage("https://www.facebook.com/huydz24");
+                if (intent != null) {
+                    // Ứng dụng Facebook đã được cài đặt, mở nó
+                    startActivity(intent);
+                } else {
+                    // Ứng dụng Facebook chưa được cài đặt, mở trang web
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/huydz24"));
+                    startActivity(intent);
+                }
+            } catch (Exception e) {
+                // Xử lý lỗi
+                Toast.makeText(MainActivity.this, "Không thể mở Facebook", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // Phương thức mở Zalo
+        private void openZalo() {
+            try {
+                Intent intent = getPackageManager().getLaunchIntentForPackage("https://zalo.me/0364356053");
+                if (intent != null) {
+                    // Ứng dụng Zalo đã được cài đặt, mở nó
+                    startActivity(intent);
+                } else {
+                    // Ứng dụng Zalo chưa được cài đặt, mở trang web
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://zalo.me/0364356053"));
+                    startActivity(intent);
+                }
+            } catch (Exception e) {
+                // Xử lý lỗi
+                Toast.makeText(MainActivity.this, "Không thể mở Zalo", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // Phương thức gọi điện
+        private void makePhoneCall() {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:0364356053"));  // Thêm tiền tố "tel:" trước số điện thoại
+            startActivity(callIntent);
+        }
+
+        // Phương thức mở trợ lý AI
+        private void openAiAssistant() {
+            // sang màn hình chat với Ai
+//            Toast.makeText(MainActivity.this, "Đang mở trợ lý AI...", Toast.LENGTH_SHORT).show();
+            Intent chatAi = new Intent(MainActivity.this, AiChatActivity.class);
+            startActivity(chatAi);
         }
     }

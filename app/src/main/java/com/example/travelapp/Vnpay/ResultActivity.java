@@ -285,10 +285,14 @@ public class ResultActivity extends AppCompatActivity {
                 String status = "processing";
 
                 Order order = new Order(orderId, username, txnRef, itemId, total, formattedDate, status);
-
                 databaseReference.child(String.valueOf(key)).setValue(order)
-                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Order saved successfully with key: " + orderId))
-                        .addOnFailureListener(e -> Log.e(TAG, "Failed to save Order", e));
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d(TAG, "Order saved successfully with key: " + orderId);
+
+                            Intent intent1 = new Intent(ResultActivity.this, TicketActivity.class);
+                            intent1.putExtra("orderId", orderId);
+
+                        });
 
                 sendMail(orderId,total,formattedDate);
             } else {
