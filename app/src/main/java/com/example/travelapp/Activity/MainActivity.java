@@ -231,7 +231,7 @@ import retrofit2.Response;
                         }
                         ArrayAdapter<Location> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        binding.locationspiner.setAdapter(adapter);
+//                        binding.locationspiner.setAdapter(adapter);
                     }
                 }
 

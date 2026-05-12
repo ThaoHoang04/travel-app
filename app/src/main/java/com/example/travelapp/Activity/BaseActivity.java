@@ -153,7 +153,7 @@ public class BaseActivity extends AppCompatActivity {
             if (intent != null) {
                 startActivity(intent);
             } else {
-                intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://www.facebook.com/huydz24"));
+                intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://www.facebook.com/nhtrieu04"));
                 startActivity(intent);
             }
         } catch (Exception e) {
@@ -167,7 +167,7 @@ public class BaseActivity extends AppCompatActivity {
             if (intent != null) {
                 startActivity(intent);
             } else {
-                intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://zalo.me/0364356053"));
+                intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://zalo.me/0978983504"));
                 startActivity(intent);
             }
         } catch (Exception e) {
@@ -177,7 +177,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private void makePhoneCall() {
         android.content.Intent callIntent = new android.content.Intent(android.content.Intent.ACTION_DIAL);
-        callIntent.setData(android.net.Uri.parse("tel:0364356053"));
+        callIntent.setData(android.net.Uri.parse("tel:0978983504"));
         startActivity(callIntent);
     }
 
