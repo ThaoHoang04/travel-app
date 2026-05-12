@@ -73,7 +73,7 @@ import retrofit2.Response;
             initPopular();
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             String username = sharedPreferences.getString("username", ""); // Lấy username từ bộ nhớ
-            Toast.makeText(this, "Xin chào " + username, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Xin chào " + username, Toast.LENGTH_SHORT).show();
 
             ChipNavigationBar chipNavigationBar = findViewById(R.id.chipNavigationBar);
             // Xử lý sự kiện khi nhấn vào menu
@@ -192,7 +192,6 @@ import retrofit2.Response;
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }
@@ -440,9 +439,8 @@ import retrofit2.Response;
 
         // Phương thức mở trợ lý AI
         private void openAiAssistant() {
-            // Ở đây bạn có thể thêm mã để mở trợ lý AI của bạn
-            // Ví dụ: mở một Activity mới hoặc hiển thị dialog
-            Toast.makeText(MainActivity.this, "Đang mở trợ lý AI...", Toast.LENGTH_SHORT).show();
+            // sang màn hình chat với Ai
+//            Toast.makeText(MainActivity.this, "Đang mở trợ lý AI...", Toast.LENGTH_SHORT).show();
             Intent chatAi = new Intent(MainActivity.this, AiChatActivity.class);
             startActivity(chatAi);
         }

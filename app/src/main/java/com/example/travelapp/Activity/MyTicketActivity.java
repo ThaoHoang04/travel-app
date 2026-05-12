@@ -99,6 +99,7 @@ public class MyTicketActivity extends AppCompatActivity {
                                     } else {
                                         Intent ticketIntent = new Intent(MyTicketActivity.this, TicketActivity.class);
                                         ticketIntent.putExtra("object", selectedTicket.getTourInfo());
+                                        ticketIntent.putExtra("orderid", selectedTicket.getOrderId());
                                         startActivity(ticketIntent);
                                     }
                                 });
